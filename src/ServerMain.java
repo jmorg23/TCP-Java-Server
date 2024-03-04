@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 // copy into cmd for a connection
 //cd Downloads
 //nc64 64.57.58.125 25565
+@Deprecated
 public class ServerMain {
 
     Thread ClientThread;

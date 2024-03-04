@@ -12,7 +12,6 @@ public class ServerMain {
     private static ArrayList<Game> games = new ArrayList<>();
     public static ArrayList<String> usedPasswords = new ArrayList<>();
     private static boolean foundGame = false;
-    private static ArrayList<Integer> timePerGame = new ArrayList<>();
     public static void removeGame(String password){
         for(int i = 0; i<games.size(); i++){
             if(games.get(i).getPassword().equals(password)){
@@ -32,7 +31,7 @@ public class ServerMain {
                 System.out.println(clients.get(clients.size()-1).isHost()+" host");
                 System.out.println(clients.get(clients.size()-1).getPassword()+" password");
 
-                if( clients.get(clients.size()-1).isHost()&&(!usedPasswords.contains(clients.get(clients.size()-1).getPassword()))){
+                if(clients.get(clients.size()-1).isHost()&&(!usedPasswords.contains(clients.get(clients.size()-1).getPassword()))){
                     games.add(new Game(clients.get(clients.size()-1)));
                     clients.remove(clients.get(clients.size()-1));
                     foundGame = true;
