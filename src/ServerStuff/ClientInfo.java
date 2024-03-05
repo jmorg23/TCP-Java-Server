@@ -2,8 +2,8 @@ package ServerStuff;
 
 public class ClientInfo {
         private String Adress = "addp";
-        private String password = "kill_boogie_23";
-        private String username = "John Wick";
+        private String password = "unk";
+        private String username = "unk";
         private boolean isHost = true;
 
         public String getAdress() {

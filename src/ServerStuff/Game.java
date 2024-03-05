@@ -13,6 +13,23 @@ public class Game {
     private ArrayList<BufferedInputStream> inStreams = new ArrayList<>();
     private ArrayList<BufferedOutputStream> outStreams = new ArrayList<>();
 
+    public void check(){
+        new Thread(()->{
+            while(true)
+            if(clients.size()==0){
+                ServerMain.removeGame(password);
+                System.out.println("No one in game with password: "+password+"\n Now removed");
+                break;
+
+            } else
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+        });
+    }
+
     public Game(Client hostClient) {
         password = hostClient.getPassword();
         clients.add(hostClient);
@@ -22,42 +39,10 @@ public class Game {
             receive(clients.size() - 1);
 
         } catch (IOException e) {
+            System.out.println("adding error");
             e.printStackTrace();
         }
-        //checkGameDone();
 
-    }
-
-
-  //  private int timeOff = 0;
-/*
-    public void checkGameDone() {
-
-        new Thread(() -> {
-            while (true) {
-                try {
-                    Thread.sleep(1000);
-                    if (timeOff >= 20) {
-                        ServerMain.usedPasswords.remove(getPassword());
-
-                        timeOut();
-                        System.out.println("Removed Game");
-                        ServerMain.removeGame(password);
-                        break;
-                    }
-
-                } catch (InterruptedException | IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }).start();
-    }
-*/
-    public void timeOut() throws IOException {
-        for (int i = 0; i < clients.size(); i++) {
-            clients.get(i).getSocket().close();
-        }
     }
 
     public void send(int index, byte[] buffer) {
@@ -72,15 +57,11 @@ public class Game {
                     }
 
                 } catch (Exception e) {
-                    e.printStackTrace();
                     System.out.println("send");
                     try {
                         clients.get(i).getSocket().close();
-                        outStreams.get(i).close();
-                        inStreams.get(i).close();
-
                     } catch (IOException e1) {
-                        System.out.println("closeing");
+                        System.out.println("ERROR closeing");
 
                         e1.printStackTrace();
                     }
@@ -123,7 +104,7 @@ public class Game {
                     }
                     Thread.sleep(1);
                 } catch (IOException | InterruptedException e) {
-                    System.out.println("recieve");
+                    System.out.println("recieving ERROR");
                     e.printStackTrace();
                 }
             }
@@ -149,7 +130,7 @@ public class Game {
             outStreams.add(new BufferedOutputStream(newClient.getSocket().getOutputStream()));
             receive(clients.size() - 1);
         } catch (IOException e) {
-            System.out.println("adding");
+            System.out.println("adding ERROR");
 
             e.printStackTrace();
         }

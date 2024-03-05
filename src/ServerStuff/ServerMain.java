@@ -28,13 +28,14 @@ public class ServerMain {
                 foundGame = false;
 
                 System.out.println(clients.get(clients.size()-1).getUsername()+" Has Been Accepted!");
-                System.out.println(clients.get(clients.size()-1).isHost()+" host");
-                System.out.println(clients.get(clients.size()-1).getPassword()+" password");
+                System.out.println("Host: "+clients.get(clients.size()-1).isHost());
+                System.out.println("Password: "+clients.get(clients.size()-1).getPassword());
 
                 if(clients.get(clients.size()-1).isHost()&&(!usedPasswords.contains(clients.get(clients.size()-1).getPassword()))){
                     games.add(new Game(clients.get(clients.size()-1)));
                     clients.remove(clients.get(clients.size()-1));
                     foundGame = true;
+                    games.get(games.size()-1).check();
 
                 }else if(!clients.get(clients.size()-1).isHost()){
                     for(int i = 0; i<games.size(); i++){
@@ -49,7 +50,7 @@ public class ServerMain {
                 }
                 if(foundGame == false){
                     clients.remove(clients.get(clients.size()-1));          
-                    System.out.println("not correct password");
+                    System.out.println("incorrect password");
 
                 }
             }
