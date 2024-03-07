@@ -15,10 +15,11 @@ public class Game {
 
     public void check(){
         new Thread(()->{
-            while(true)
+            while(true){
             if(clients.size()==0){
-                ServerMain.removeGame(password);
                 System.out.println("No one in game with password: "+password+"\n Now removed");
+
+                ServerMain.removeGame(password);
                 break;
 
             } else
@@ -27,7 +28,10 @@ public class Game {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-        });
+            System.out.println(clients.size());
+
+            }
+        }).start();
     }
 
     public Game(Client hostClient) {
@@ -36,7 +40,7 @@ public class Game {
         try {
             inStreams.add(new BufferedInputStream(hostClient.getSocket().getInputStream()));
             outStreams.add(new BufferedOutputStream(hostClient.getSocket().getOutputStream()));
-            receive(clients.size() - 1);
+            receive(clients.size()-1);
 
         } catch (IOException e) {
             System.out.println("adding error");
@@ -70,42 +74,41 @@ public class Game {
 
         }).start();
     }
-
+    int nothingFor = 0;
     public void receive(int index) {
         new Thread(() -> {
             while (true) {
-                if ((clients.size() - 1) < index) {
+                try{
+                //System.out.println(clients.get(index).getSocket().isClosed());
+                
+                if ((clients.size()) < index) {
                     break;
                 }
                 if(clients.get(index).getSocket().isClosed())
                 break;
-                try {
+                
                     if ((clients.size() - 1) < index) {
                         break;
                     }
-                    byte[] buffer = new byte[1080];
+                    byte[] buffer = new byte[1000000];
 
-                    inStreams.get(index).read(buffer);
-                    boolean isEmpty = true;
-
-                    for (byte b : buffer) {
-                        if (b != 0) {
-                            isEmpty = false;
-                            break;
-                        }
-                    }
-                    if (isEmpty)
-                        if (buffer.length == 0) {
-                            isEmpty = false;
-                        }
-                    if (!isEmpty) {
-                        send(index, buffer);
+                    if(inStreams.get(index).available()>0){
+                        inStreams.get(index).read(buffer);
+                        nothingFor = 0;
+                    }else{
+                        Thread.sleep(100);
+                        nothingFor+=100;
 
                     }
-                    Thread.sleep(1);
-                } catch (IOException | InterruptedException e) {
+                    if(nothingFor>60000)
+                    break;
+                    send(index, buffer);
+
+
+                } catch (Exception e) {
                     System.out.println("recieving ERROR");
                     e.printStackTrace();
+                    break;
                 }
             }
             clients.remove(index);
@@ -128,7 +131,7 @@ public class Game {
         try {
             inStreams.add(new BufferedInputStream(newClient.getSocket().getInputStream()));
             outStreams.add(new BufferedOutputStream(newClient.getSocket().getOutputStream()));
-            receive(clients.size() - 1);
+            receive(clients.size()-1);
         } catch (IOException e) {
             System.out.println("adding ERROR");
 
