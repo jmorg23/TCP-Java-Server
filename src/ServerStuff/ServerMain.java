@@ -39,6 +39,9 @@ public class ServerMain {
 
                 }else if(!clients.get(clients.size()-1).isHost()){
                     for(int i = 0; i<games.size(); i++){
+                        
+                        
+                        
                         if(games.get(i).getPassword().equals(clients.get(clients.size()-1).getPassword())){
                             games.get(i).addClient(clients.get(clients.size()-1));
                             clients.remove(clients.get(clients.size()-1));       

@@ -78,9 +78,7 @@ public class Game {
     public void receive(int index) {
         new Thread(() -> {
             while (true) {
-                try{
-                //System.out.println(clients.get(index).getSocket().isClosed());
-                
+                try{                
                 if ((clients.size()) < index) {
                     break;
                 }
