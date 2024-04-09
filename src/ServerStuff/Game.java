@@ -14,10 +14,11 @@ public class Game {
 
     public void check(){
         new Thread(()->{
-            while(true)
+            while(true){
             if(clients.size()==0){
-                ServerMain.removeGame(password);
                 System.out.println("No one in game with password: "+password+"\n Now removed");
+
+                ServerMain.removeGame(password);
                 break;
 
             } else
@@ -26,7 +27,10 @@ public class Game {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-        });
+            System.out.println(clients.size());
+
+            }
+        }).start();
     }
 
     public Game(Client hostClient) {
@@ -67,11 +71,12 @@ public class Game {
 
         }).start();
     }
-
+    int nothingFor = 0;
     public void receive(int index) {
         new Thread(() -> {
             while (true) {
-                if ((clients.size() - 1) < index) {
+                try{                
+                if ((clients.size()) < index) {
                     break;
                 }
                 if(clients.get(index).getSocket().isClosed())
