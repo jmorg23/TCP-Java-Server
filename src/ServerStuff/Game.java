@@ -1,7 +1,6 @@
 package ServerStuff;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+
 import java.io.IOException;
 
 import java.util.ArrayList;
@@ -10,8 +9,8 @@ public class Game {
 
     private String password = "";
     private ArrayList<Client> clients = new ArrayList<>();
-    private ArrayList<BufferedInputStream> inStreams = new ArrayList<>();
-    private ArrayList<BufferedOutputStream> outStreams = new ArrayList<>();
+    //private ArrayList<BufferedInputStream> inStreams = new ArrayList<>();
+    //private ArrayList<BufferedOutputStream> outStreams = new ArrayList<>();
 
     public void check(){
         new Thread(()->{
@@ -34,11 +33,8 @@ public class Game {
         password = hostClient.getPassword();
         clients.add(hostClient);
         try {
-            inStreams.add(new BufferedInputStream(hostClient.getSocket().getInputStream()));
-            outStreams.add(new BufferedOutputStream(hostClient.getSocket().getOutputStream()));
             receive(clients.size() - 1);
-
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("adding error");
             e.printStackTrace();
         }
@@ -51,13 +47,14 @@ public class Game {
                 try {
                     if(!clients.get(i).getSocket().isClosed())
                     if (i != index) {
-                        outStreams.get(i).write(buffer);
-                        outStreams.get(i).flush();
+                        clients.get(i).getOs().write(buffer);
+                        clients.get(i).getOs().flush();
+                        System.out.println("sent packet");
 
                     }
 
                 } catch (Exception e) {
-                    System.out.println("send");
+                    System.out.println("Send: "+e);
                     try {
                         clients.get(i).getSocket().close();
                     } catch (IOException e1) {
@@ -78,39 +75,33 @@ public class Game {
                     break;
                 }
                 if(clients.get(index).getSocket().isClosed())
-                break;
+                    break;
                 try {
                     if ((clients.size() - 1) < index) {
                         break;
                     }
-                    byte[] buffer = new byte[1080];
+                    if(clients.get(index).getSocket().isClosed())
+                    break;
+                    byte[] buffer = new byte[4096];
 
-                    inStreams.get(index).read(buffer);
-                    boolean isEmpty = true;
+                    clients.get(index).getIs().read(buffer);
+                    System.out.println("recieved packet from: "+clients.get(index).getUsername());
+                    //System.out.println(new String(buffer, "UTF-8"));
 
-                    for (byte b : buffer) {
-                        if (b != 0) {
-                            isEmpty = false;
-                            break;
-                        }
+                    if(buffer.length>1){
+
+                    send(index, buffer);
                     }
-                    if (isEmpty)
-                        if (buffer.length == 0) {
-                            isEmpty = false;
-                        }
-                    if (!isEmpty) {
-                        send(index, buffer);
 
-                    }
                     Thread.sleep(1);
                 } catch (IOException | InterruptedException e) {
                     System.out.println("recieving ERROR");
                     e.printStackTrace();
+                    break;
                 }
             }
             clients.remove(index);
-            outStreams.remove(index);
-            inStreams.remove(index);
+
 
             
         }).start();
@@ -126,10 +117,9 @@ public class Game {
 
         clients.add(newClient);
         try {
-            inStreams.add(new BufferedInputStream(newClient.getSocket().getInputStream()));
-            outStreams.add(new BufferedOutputStream(newClient.getSocket().getOutputStream()));
+
             receive(clients.size() - 1);
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("adding ERROR");
 
             e.printStackTrace();
