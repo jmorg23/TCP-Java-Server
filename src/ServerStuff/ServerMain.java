@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class ServerMain {
 
-    private static final int port = 45;
+    private static final int port = 25565;
     private static ServerSocket serverSocket;
     private static ArrayList<Client> clients = new ArrayList<>();
     private static ArrayList<Game> games = new ArrayList<>();
@@ -17,9 +17,19 @@ public class ServerMain {
 
 
     public static void removeGame(String password){
+        System.out.println("attempting to get rid of game");
         for(int i = 0; i<games.size(); i++){
             if(games.get(i).getPassword().equals(password)){
+                for(Client c : games.get(i).getClients()){
+                    try {
+                        c.getSocket().close();
+                    } catch (IOException e) {
+                        
+                    }
+                }
+                System.out.println("game removed with password: "+games.get(i).getPassword());
                 games.remove(i);
+
             }
         }
     }
@@ -27,10 +37,10 @@ public class ServerMain {
 
     public ServerMain(){
         try {
-            serverSocket = new ServerSocket(port, 0, InetAddress.getLocalHost());
+            serverSocket = new ServerSocket(port);
             System.out.println("Server Started");
             System.out.println("On port: "+ port);
-            System.out.println("With address: "+InetAddress.getLocalHost());
+            System.out.println("With address: 64.57.58.125");
 
             while(true){
                 clients.add(new Client(serverSocket.accept()));
@@ -44,7 +54,7 @@ public class ServerMain {
                     games.add(new Game(clients.get(clients.size()-1)));
                     clients.remove(clients.get(clients.size()-1));
                     foundGame = true;
-                    games.get(games.size()-1).check();
+
 
                 }
                 //They are a client

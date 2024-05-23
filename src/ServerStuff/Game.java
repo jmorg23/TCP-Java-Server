@@ -12,27 +12,6 @@ public class Game {
     //private ArrayList<BufferedInputStream> inStreams = new ArrayList<>();
     //private ArrayList<BufferedOutputStream> outStreams = new ArrayList<>();
 
-    public void check(){
-        new Thread(()->{
-            while(true){
-            if(clients.size()==0){
-                System.out.println("No one in game with password: "+password+"\n Now removed");
-
-                ServerMain.removeGame(password);
-                break;
-
-            } else
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            System.out.println(clients.size());
-
-            }
-        }).start();
-    }
-
     public Game(Client hostClient) {
         password = hostClient.getPassword();
         clients.add(hostClient);
@@ -43,6 +22,10 @@ public class Game {
             e.printStackTrace();
         }
 
+    }
+
+    public ArrayList<Client> getClients() {
+        return clients;
     }
 
     public void send(int index, byte[] buffer) {
@@ -75,7 +58,7 @@ public class Game {
     public void receive(int index) {
         new Thread(() -> {
             while (true) {
-                try{                
+                
                 if ((clients.size()) < index) {
                     break;
                 }
@@ -87,16 +70,25 @@ public class Game {
                     }
                     if(clients.get(index).getSocket().isClosed())
                     break;
+                    if(clients.get(index).getIs().available()>1){
                     byte[] buffer = new byte[4096];
 
                     clients.get(index).getIs().read(buffer);
                     System.out.println("recieved packet from: "+clients.get(index).getUsername());
-                    //System.out.println(new String(buffer, "UTF-8"));
-
+                        try{
+                            String s = new String(buffer, "UTF-8");
+                            if(s.contains(("--=quit"))){
+                                ServerMain.removeGame(password);
+                                
+                            }
+                            System.out.println("Packet: "+s);
+                        }catch(Exception e){
+                            System.out.println("cannot convert to string but no problem");
+                        }
                     if(buffer.length>1){
 
                     send(index, buffer);
-                    }
+                    }}
 
                     Thread.sleep(1);
                 } catch (IOException | InterruptedException e) {

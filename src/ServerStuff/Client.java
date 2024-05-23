@@ -36,8 +36,8 @@ public class Client {
             Username = myInfo.getUsername();
             host = myInfo.getIsHost();
             Password = myInfo.getPassword();
-            Ping myping = new Ping(this);
-            myping.start();
+            //Ping myping = new Ping(this);
+            //myping.start();
 
         } catch (IOException e) {
             e.printStackTrace();
