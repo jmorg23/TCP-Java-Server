@@ -3,8 +3,8 @@ package ServerStuff;
 public class ClientInfo {
         private String Adress = "addp";
         private String password = "unk";
-        private String username = "unk";
-        private boolean isHost = true;
+        private String username = "Post Malone";
+        private boolean isHost = false;
 
         public String getAdress() {
             return Adress;

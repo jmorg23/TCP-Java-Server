@@ -10,9 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ExClient{
 
-    private final String IPAdress = "192.168.3.74";
-    private static final int port = 999;
-
+    private final String IPAdress = "18.116.165.176";
+    private static final int port = 25565;
     Socket socket;
     BufferedInputStream is;
     BufferedOutputStream os;
@@ -20,7 +19,7 @@ public class ExClient{
     ObjectMapper mapper = new ObjectMapper();
     public ExClient(){
         try {
-
+            System.out.println("trying to connect to: "+IPAdress+" on port: "+port);
             socket = new Socket(IPAdress, port);
 
             is = new BufferedInputStream(socket.getInputStream());
