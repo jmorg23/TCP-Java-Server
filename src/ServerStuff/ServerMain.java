@@ -40,7 +40,7 @@ public class ServerMain {
             serverSocket = new ServerSocket(port);
             System.out.println("Server Started");
             System.out.println("On port: "+ port);
-            System.out.println("With address: 64.57.58.125");
+            // System.out.println("With address: 64.57.58.125");
 
             while(true){
                 clients.add(new Client(serverSocket.accept()));
