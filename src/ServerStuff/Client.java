@@ -9,6 +9,8 @@ import java.net.Socket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import exampleUsage.ClientInfo;
+
 public class Client {
 
     private String Username;

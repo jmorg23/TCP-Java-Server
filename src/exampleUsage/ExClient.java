@@ -1,4 +1,4 @@
-package ServerStuff;
+package exampleUsage;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ExClient{
 
-    private final String IPAdress = "18.116.165.176";
+    private final String IPAdress = "18.219.121.224";
     private static final int port = 25565;
     Socket socket;
     BufferedInputStream is;
@@ -19,6 +19,17 @@ public class ExClient{
     ObjectMapper mapper = new ObjectMapper();
     public ExClient(){
         try {
+            Scanner scan = new Scanner(System.in);
+            System.out.print("host true/false: ");
+            myInfo.setHost(Boolean.parseBoolean(scan.nextLine()));
+            System.out.print("Enter Username: ");
+            myInfo.setUsername(scan.nextLine());
+            System.out.print("Enter password: ");
+            myInfo.setPassword(scan.nextLine());
+
+
+
+            
             System.out.println("trying to connect to: "+IPAdress+" on port: "+port);
             socket = new Socket(IPAdress, port);
 
@@ -69,7 +80,6 @@ public class ExClient{
                         isEmpty = false;
                     }
                     if(!isEmpty){
-                    System.out.println("rec and sent");
                     System.out.println(new String(buffer, "UTF-8"));
                     }
 

@@ -1,4 +1,4 @@
-package ServerStuff;
+package exampleUsage;
 
 public class ClientInfo {
         private String Adress = "addp";
