@@ -24,9 +24,9 @@ public class ServerMain {
             if (games.get(i).getPassword().equals(password)) {
                 for (Client c : games.get(i).getClients()) {
                     try {
-                        c.getSocket().close();
+                        c.end();
                     } catch (IOException e) {
-
+                        System.out.println(e);
                     }
                 }
                 System.out.println("game removed with password: " + games.get(i).getPassword());
