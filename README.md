@@ -17,3 +17,4 @@
      * If no data is sent to server for 2 seconds it will send a ping to the client and if it gets either a pong or any type of data, then it will keep client. If nothing is given back for 5 seconds it will end client
      * Logs are made in the logs folder. With the ServerLog holding incoming clients and if they are accepted, while other Game logs are made under folder titled with that games id
      * Server is meant to keep running, so the commands were designed to be able to interact with the server while it is running
+     * Dont forget to change IPAdress in ExClient to be the Servers IPAdress and the port to your desired Port #
