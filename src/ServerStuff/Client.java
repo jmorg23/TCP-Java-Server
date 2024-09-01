@@ -25,9 +25,9 @@ public class Client {
     private BufferedOutputStream os;
     private ClientInfo myInfo;
     private ObjectMapper mapper = new ObjectMapper();
-    private int timeout = 5;
+    private int timeout = 10;
     private double time = 0;
-    private double minTime = 2;
+    private double minTime = 4;
     private boolean quit = false;
 
     public Client(Socket s, Log serverLog) {
@@ -111,10 +111,14 @@ public class Client {
     private void resetTimer() {
         time = 0;
         timerCon = 0;
+        timer2Con = 0;
+
     }
 
 
     private int timerCon = 0;
+    private int timer2Con = 0;
+
     private void startTimer() {
         new Thread(() -> {
             while (true) {
@@ -134,9 +138,12 @@ public class Client {
                     }
                     Thread.sleep(100);
                     time += 0.1;
-                    if(time>=minTime&&timerCon ==0){
+                    if((time>=minTime&&timerCon ==0)||((time>=minTime*2)&&timer2Con==0)){
                         writePing();
                         timerCon = 1;
+                        if(time>=minTime*2){
+                            timer2Con=1;
+                        }
                     }
                     
                 } catch (Exception e) {
@@ -169,7 +176,7 @@ public class Client {
         }else{
 
             resetTimer();
-
+            if(log!=null)
             log.writeSend(new String(buffer, "UTF-8").replace("\0", ""));
             return false;
         }
@@ -183,7 +190,6 @@ public class Client {
     public void init() throws IOException {
         log = new Log(ServerMain.getIDFromPassword(Password), Username, host);
         startTimer();
-       // writePing();
     }
 
     public static String removeSpecialChars(String str) {
