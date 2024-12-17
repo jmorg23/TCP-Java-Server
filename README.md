@@ -9,6 +9,7 @@
         - show clients "game" -> shows all clients within a certain game (password must be known and inserted in "game")
         - end /u "username" /p "password" -> ends the client with that username and password
         - remove "game" -> removes that game and ends every client within it
+        - remove /all -> removes all active games for a fresh server restart
 
 - How it words
      * A client connecting that is host will be put into its own game. It will have the password for that game that whoever joins with the same password and not host will join that game

@@ -111,8 +111,18 @@ public class ServerMain {
                 String command = scanner.nextLine();
                 if (command.contains("remove")) {
                     String g = command.substring(7, command.length());
-                    System.out.println("Attempting to remove game with password: " + g);
+                    if (g.equals("/all")) {
+                        System.out.println("removing all games");
+                        for (Game c : games) {
+                           removeGame(c.getPassword());
+                        }
+                        System.out.println("successfully removed");
+
+                    }
                     if (usedPasswords.contains(g)) {
+                    
+                        System.out.println("Attempting to remove game with password: " + g);
+
                         removeGame(g);
                         System.out.println("successfully removed");
                     } else {
