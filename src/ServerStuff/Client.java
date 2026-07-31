@@ -50,7 +50,7 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
             try {
-                serverLog.write("Client did not give the right format to join at: ["+LocalDateTime.now()+"]");
+                //serverLog.write("Client did not give the right format to join at: ["+LocalDateTime.now()+"]");
 
                 is.close();
                 socket.close();
@@ -85,6 +85,7 @@ public class Client {
         try {
             os.write(new String("PONG").getBytes());
             os.flush();
+            System.out.println("wrote pong to: "+Username);
 
         }catch (SocketException e1){
             try {
@@ -102,7 +103,7 @@ public class Client {
     }
 
     public void write(byte[] buffer) throws IOException {
-        log.writeReceived(new String(buffer, "UTF-8").replace("\0", ""));
+       // log.writeReceived(new String(buffer, "UTF-8").replace("\0", ""));
 
         os.write(buffer);
         os.flush();
@@ -164,6 +165,7 @@ public class Client {
      */
     public boolean read(byte[] buffer) throws IOException {
         is.read(buffer);
+        System.out.println("rec: "+new String(buffer, "UTF-8"));
         if (new String(buffer, "UTF-8").replace("\0", "").equals("PONG")) {
             resetTimer();
 

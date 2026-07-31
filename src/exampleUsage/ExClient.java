@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ExClient {
 
-    private final String IPAdress = "192.168.1.101";
+    private final String IPAdress = "localhost";
     private static final int port = 25565;
     private Socket socket;
     private BufferedInputStream is;

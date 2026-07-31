@@ -12,7 +12,7 @@ public class ServerMain {
     private static final int port = 25565;
     private static ServerSocket serverSocket;
     private static Client curClient;
-    private static ArrayList<Game> games = new ArrayList<>();
+    static ArrayList<Game> games = new ArrayList<>();
     public static ArrayList<String> usedPasswords = new ArrayList<>();
     private static boolean allowCommands = true;
     private static Log serverLog;
@@ -63,8 +63,8 @@ public class ServerMain {
                         games.add(new Game(curClient));
                         usedPasswords.add(curClient.getPassword());
                         curClient.init();
-                        serverLog.write("Client was accepted as a host at: ["+LocalDateTime.now()+"]");
-                        serverLog.write("Created game: "+games.get(games.size()-1).getID()+" and password: "+games.get(games.size()-1).getPassword()+" at: ["+LocalDateTime.now()+"]");
+                    serverLog.write("Client was accepted as a host at: ["+LocalDateTime.now()+"]");
+                    serverLog.write("Created game: "+games.get(games.size()-1).getID()+" and password: "+games.get(games.size()-1).getPassword()+" at: ["+LocalDateTime.now()+"]");
 
                     }
                     // They are a client
@@ -98,7 +98,9 @@ public class ServerMain {
             }
         }).start();
 
-        getCommands();
+        CLI commandline = new CLI();
+        commandline.startGUI();
+        //getCommands();
 
     }
 
